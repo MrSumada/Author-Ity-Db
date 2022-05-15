@@ -30,24 +30,17 @@ const resolvers = {
             return { token, user };
         },
         addUser: async (parent, args) => {
-            console.log("args: " + args);
             const user = await User.create(args);
             const token = signToken(user);
-            console.log("user: " + user);
-            console.log("token: ", token);
             return { token, user };
         },
         saveBook: async (parent, { bookId, title, description, image, link, authors }, context) => {
-            console.log("saveBook called....")
-            console.log("bookId: ", bookId)
             if (context.user) {
-                console.log("user: ", context.user)
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
                     { $addToSet: { savedBooks: {bookId: bookId, title: title, description: description, image: image, link: link, authors, authors} } },
                     { new: true }
                 ).populate('savedBooks');
-                console.log(updatedUser);
                 return updatedUser;
             }
             throw new AuthenticationError('You need to be logged in!')
