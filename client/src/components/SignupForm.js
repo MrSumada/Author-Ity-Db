@@ -19,6 +19,7 @@ const SignupForm = () => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
+    
   };
 
   const handleFormSubmit = async (event) => {
@@ -31,36 +32,19 @@ const SignupForm = () => {
       event.stopPropagation();
     }
 
-
     try {
-      const { response } = await addUser({
+      console.log(userFormData);
+      const response = await addUser({
         variables: { ...userFormData },
       });
-      console.log(response);
-      Auth.login(response.addUser.token);
+
+      const data = response.data.addUser
+      console.log(data);
+      Auth.login(data.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
     }
-    // try {
-    //   const { response } = await addUser({
-    //     variables: { userFormData }
-    //   });
-
-    //   if (!response.ok) {
-    //     throw new Error('something went wrong!');
-    //   }
-
-    //   const { token, user } = await response.json();
-    //   console.log(user);
-
-    //   addUser({ variables: { ...user}})
-      
-    //   Auth.login(token);
-    // } catch (err) {
-    //   console.error(err);
-    //   setShowAlert(true);
-    // }
 
     setUserFormData({
       username: '',

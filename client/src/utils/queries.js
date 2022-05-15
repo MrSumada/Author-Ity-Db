@@ -15,10 +15,6 @@ export const GET_ME = gql`
                 link
                 authors 
             }
-            friends {
-                _id
-                username
-            }
         }
     }
 `;

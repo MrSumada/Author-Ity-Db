@@ -10,7 +10,14 @@ import { SAVE_BOOK } from '../utils/mutations';
 
 const SearchBooks = () => {
 
-  const[ saveBook] = useMutation(SAVE_BOOK);
+  const[saveBook] = useMutation(SAVE_BOOK, {
+    context: {
+      headers: {
+        "authorization": Auth.loggedIn() ? Auth.getToken() : null
+      }
+    }
+  });
+
 
   // create state for holding returned google api data
   const [searchedBooks, setSearchedBooks] = useState([]);
@@ -65,17 +72,21 @@ const SearchBooks = () => {
 
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
+    console.log("token: ", token)
 
-    if (!token) {
-      return false;
-    }
+    // if (!token) {
+    //   return false;
+    // }
 
+    console.log("bookToSave: ", bookToSave);
     try {
-      const response = await saveBook({bookToSave, token});
+      await saveBook({
+        variables: {...bookToSave, token}
+      });
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
+      // if (!response.ok) {
+      //   throw new Error('something went wrong!');
+      // }
 
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
