@@ -5,8 +5,8 @@ import './index.css';
 import App from './App';
 
 ReactDOM.render(
-  <BrowserRouter>
+  <React>
     <App />
-  </BrowserRouter>,
+  </React>,
   document.getElementById('root')
 );
